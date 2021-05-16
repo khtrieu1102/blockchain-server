@@ -93,6 +93,10 @@ const generateRawNextBlock = (blockData) => {
 		blockData,
 		difficulty
 	);
+	// const coinbaseTx = transaction.getCoinbaseTransaction(
+	// 	wallet.getPublicFromPrivateKey(privateKey),
+	// 	getLatestBlock().index + 1
+	// );
 	if (addBlockToChain(newBlock)) {
 		p2p.broadcastLatest();
 		return newBlock;
@@ -102,23 +106,30 @@ const generateRawNextBlock = (blockData) => {
 };
 exports.generateRawNextBlock = generateRawNextBlock;
 // gets the unspent transaction outputs owned by the wallet
-const getMyUnspentTransactionOutputs = () => {
+const getMyUnspentTransactionOutputs = (privateKey) => {
 	return wallet.findUnspentTxOuts(
-		wallet.getPublicFromWallet(),
+		wallet.getPublicFromPrivateKey(privateKey),
 		getUnspentTxOuts()
 	);
 };
 exports.getMyUnspentTransactionOutputs = getMyUnspentTransactionOutputs;
-const generateNextBlock = () => {
+
+const generateNextBlock = (privateKey) => {
 	const coinbaseTx = transaction.getCoinbaseTransaction(
-		wallet.getPublicFromWallet(),
+		wallet.getPublicFromPrivateKey(privateKey),
 		getLatestBlock().index + 1
 	);
 	const blockData = [coinbaseTx].concat(transactionPool.getTransactionPool());
 	return generateRawNextBlock(blockData);
 };
+
 exports.generateNextBlock = generateNextBlock;
-const generatenextBlockWithTransaction = (receiverAddress, amount) => {
+
+const generatenextBlockWithTransaction = (
+	receiverAddress,
+	amount,
+	privateKey
+) => {
 	if (!transaction.isValidAddress(receiverAddress)) {
 		throw Error("invalid address");
 	}
@@ -126,13 +137,13 @@ const generatenextBlockWithTransaction = (receiverAddress, amount) => {
 		throw Error("invalid amount");
 	}
 	const coinbaseTx = transaction.getCoinbaseTransaction(
-		wallet.getPublicFromWallet(),
+		wallet.getPublicFromPrivateKey(privateKey),
 		getLatestBlock().index + 1
 	);
 	const tx = wallet.createTransaction(
 		receiverAddress,
 		amount,
-		wallet.getPrivateFromWallet(),
+		privateKey,
 		getUnspentTxOuts(),
 		transactionPool.getTransactionPool()
 	);
@@ -165,15 +176,27 @@ const findBlock = (index, previousHash, timestamp, data, difficulty) => {
 		nonce++;
 	}
 };
+
 const getAccountBalance = () => {
 	return wallet.getBalance(wallet.getPublicFromWallet(), getUnspentTxOuts());
 };
+
 exports.getAccountBalance = getAccountBalance;
-const sendTransaction = (address, amount) => {
+
+const getAccountBalanceByPrivateKey = (privateKey) => {
+	console.log(privateKey, wallet.getPublicFromPrivateKey(privateKey));
+	return wallet.getBalance(
+		wallet.getPublicFromPrivateKey(privateKey),
+		getUnspentTxOuts()
+	);
+};
+exports.getAccountBalanceByPrivateKey = getAccountBalanceByPrivateKey;
+
+const sendTransaction = (address, amount, privateKey) => {
 	const tx = wallet.createTransaction(
 		address,
 		amount,
-		wallet.getPrivateFromWallet(),
+		privateKey,
 		getUnspentTxOuts(),
 		transactionPool.getTransactionPool()
 	);

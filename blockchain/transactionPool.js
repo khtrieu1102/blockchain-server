@@ -7,7 +7,7 @@ const getTransactionPool = () => {
 exports.getTransactionPool = getTransactionPool;
 const addToTransactionPool = (tx, unspentTxOuts) => {
 	if (!transaction.validateTransaction(tx, unspentTxOuts)) {
-		throw Error("Trying to add invalid tx to pool");
+		throw Error("Trying to add invalid tx to pool1");
 	}
 	if (!isValidTxForPool(tx, transactionPool)) {
 		throw Error("Trying to add invalid tx to pool");

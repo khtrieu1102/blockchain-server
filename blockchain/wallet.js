@@ -8,13 +8,23 @@ const getPrivateFromWallet = () => {
 	const buffer = fs.readFileSync(privateKeyLocation, "utf8");
 	return buffer.toString();
 };
+
 exports.getPrivateFromWallet = getPrivateFromWallet;
+
 const getPublicFromWallet = () => {
 	const privateKey = getPrivateFromWallet();
 	const key = EC.keyFromPrivate(privateKey, "hex");
 	return key.getPublic().encode("hex");
 };
+
+const getPublicFromPrivateKey = (privateKey) => {
+	const key = EC.keyFromPrivate(privateKey, "hex");
+	return key.getPublic().encode("hex");
+};
+
+exports.getPublicFromPrivateKey = getPublicFromPrivateKey;
 exports.getPublicFromWallet = getPublicFromWallet;
+
 const generatePrivateKey = () => {
 	const keyPair = EC.genKeyPair();
 	const privateKey = keyPair.getPrivate();
