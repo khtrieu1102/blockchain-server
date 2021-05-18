@@ -22,11 +22,11 @@ const genesisTransaction = {
 	txOuts: [
 		{
 			address:
-				"04bfcab8722991ae774db48f934ca79cfb7dd991229153b9f732ba5334aafcd8e7266e47076996b55a14bf9913ee3145ce0cfc1372ada8ada74bd287450313534a",
+				"040eadda78aeadf639be0b7c6d5a383a9851d05be14b7569f7f8291c4bd7d1e30a7014c86788d57584e17eb835b32c158a60e7191e8f5ad9d8801fa56d4baa5302",
 			amount: 50,
 		},
 	],
-	id: "e655f6a5f26dc9b4cac6e46f52336428287759cf81ef5ff10854f69d68f43fa3",
+	id: "b1ee3aaf6a53fe0f64146ef56be8d85b1de0a4b7e6388c823ddf8ffc2ed40e0a",
 };
 const genesisBlock = new Block(
 	0,
